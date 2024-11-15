@@ -24,6 +24,16 @@ That is the purpose why I have these and I just know having these in any IT pers
   - [Get-GroupMembershipReport](#get-groupmembershipreport)
   - [Get-LockedAccounts](#get-lockedaccounts)
   - [New-ADUserFromTemplate](#new-aduserfromtemplate)
+  - [Get-OldOSComputers](#get-oldoscomputers)
+  - [Get-EmptySecurityGroups](#get-emptysecuritygroups)
+  - [Get-NeverExpiringPasswords](#get-neverexpiringpasswords)
+  - [Get-PasswordComplexityReport](#get-passwordcomplexityreport)
+  - [Get-InactiveComputers](#get-inactivecomputers)
+  - [Get-GPOLinkReport](#get-gpolinkreport)
+  - [Get-NestedGroupMembership](#get-nestedgroupmembership)
+  - [Get-UserLoginHistory](#get-userloginhistory)
+  - [Get-ADComputerDNS](#get-adcomputerdns)
+  - [Get-ADPermissionsReport](#get-adpermissionsreport)
 
 ## Overview
 
@@ -38,6 +48,7 @@ This script collection provides essential tools for Active Directory administrat
 
 ## File Structure
 
+(This is a suggestion rather than a "right way" to do things)
 The scripts should be organized using the following structure and naming conventions:
 
 ```
@@ -47,7 +58,17 @@ AD-Management/
 │   ├── Get-InactiveADUsers.ps1
 │   ├── Get-ExpiredPasswords.ps1
 │   ├── Get-GroupMembershipReport.ps1
-│   └── Get-LockedAccounts.ps1
+│   ├── Get-LockedAccounts.ps1
+│   ├── Get-OldOSComputers.ps1
+│   ├── Get-EmptySecurityGroups.ps1
+│   ├── Get-NeverExpiringPasswords.ps1
+│   ├── Get-PasswordComplexityReport.ps1
+│   ├── Get-InactiveComputers.ps1
+│   ├── Get-GPOLinkReport.ps1
+│   ├── Get-NestedGroupMembership.ps1
+│   ├── Get-UserLoginHistory.ps1
+│   ├── Get-ADComputerDNS.ps1
+│   └── Get-ADPermissionsReport.ps1
 │
 ├── Management/
 │   ├── Remove-DisabledUsers.ps1
@@ -362,6 +383,110 @@ New-ADUserFromTemplate -NewUserFirstName "Sarah" -NewUserLastName "Johnson" -Tem
 ```
 User sarah.johnson created successfully with same groups as jsmith
 ```
+
+### Get-OldOSComputers
+
+Generates a report of all Windows computers in the domain with their operating system information.
+
+```powershell
+Get-OldOSComputers -OutputPath "C:\Reports\OldOSComputers.csv"
+```
+
+**Output columns:** Name, OperatingSystem, OperatingSystemVersion, LastLogon, IPv4Address, Created
+
+### Get-EmptySecurityGroups
+
+Identifies security groups with no members.
+
+```powershell
+Get-EmptySecurityGroups -OutputPath "C:\Reports\EmptyGroups.csv"
+```
+
+**Output columns:** Name, GroupCategory, GroupScope, Description, Created, Modified
+
+### Get-NeverExpiringPasswords
+
+Lists users with passwords set to never expire.
+
+```powershell
+Get-NeverExpiringPasswords -OutputPath "C:\Reports\NeverExpiringPasswords.csv"
+```
+
+**Output columns:** Name, SamAccountName, Title, Department, Manager, PasswordLastSet
+
+### Get-PasswordComplexityReport
+
+Analyzes password policy compliance across the domain. Generates two CSV files:
+
+- Policy report: Domain password policy settings
+- User details: Individual user password settings
+
+```powershell
+Get-PasswordComplexityReport -OutputPath "C:\Reports\PasswordComplexity"
+# Creates PasswordComplexity_Policy.csv and PasswordComplexity_UserDetails.csv
+```
+
+**Policy output includes:** MinPasswordLength, PasswordHistoryCount, MaxPasswordAge, MinPasswordAge, ComplexityEnabled, TotalUsers, UsersPasswordNeverExpires, UsersPasswordNotRequired
+
+### Get-InactiveComputers
+
+Lists computers that haven't logged in for a specified number of days.
+
+```powershell
+Get-InactiveComputers -DaysInactive 90 -OutputPath "C:\Reports\InactiveComputers.csv"
+```
+
+**Output columns:** Name, OperatingSystem, LastLogon, IPv4Address, Created
+
+### Get-GPOLinkReport
+
+Analyzes Group Policy Object links across all OUs.
+
+```powershell
+Get-GPOLinkReport -OutputPath "C:\Reports\GPOLinks.csv"
+```
+
+**Output columns:** OUName, OUDN, GPOName, Enabled, Enforced, Order
+
+### Get-NestedGroupMembership
+
+Discovers nested group memberships for a specified group.
+
+```powershell
+Get-NestedGroupMembership -GroupName "Domain Admins" -OutputPath "C:\Reports\NestedGroups.csv"
+```
+
+**Output columns:** ParentGroup, MemberName, Type, Level
+
+### Get-UserLoginHistory
+
+Retrieves login history for a specific user across all domain controllers.
+
+```powershell
+Get-UserLoginHistory -Username "john.doe" -Days 30 -OutputPath "C:\Reports\UserLoginHistory.csv"
+```
+
+**Output columns:** Time, DC, IPAddress, LogonType
+
+### Get-ADComputerDNS
+
+Verifies DNS records for all AD computers.
+
+```powershell
+Get-ADComputerDNS -OutputPath "C:\Reports\ComputerDNS.csv"
+```
+
+**Output columns:** ComputerName, DNSHostName, IPv4Address, DNSResolved, ResolvedIP, OperatingSystem, LastLogon
+
+### Get-ADPermissionsReport
+
+Analyzes Active Directory permissions at the domain level.
+
+```powershell
+Get-ADPermissionsReport -OutputPath "C:\Reports\ADPermissions.csv"
+```
+
+**Output columns:** IdentityReference, AccessControlType, ActiveDirectoryRights, InheritanceType, ObjectType, InheritedObjectType, IsInherited
 
 ## Best Practices
 

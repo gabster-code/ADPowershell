@@ -9,7 +9,7 @@
     CompatiblePSEditions = @('Desktop', 'Core')
 
     # ID used to uniquely identify this module
-    GUID = '[Generate a new GUID]'  # Use New-Guid to generate
+    GUID = '3d5d1bfb-8ebd-411b-a3a2-3d41e96de9bb'  # Use New-Guid to generate
 
     # Author of this module
     Author = 'Kevin Jornacion'
@@ -37,7 +37,18 @@
         'Remove-DisabledUsers',
         'Get-GroupMembershipReport',
         'Get-LockedAccounts',
-        'New-ADUserFromTemplate'
+        'New-ADUserFromTemplate'.
+        'Get-OldOSComputers',
+        'Get-EmptySecurityGroups',
+        'Get-NeverExpiringPasswords',
+        'Get-PasswordComplexityReport',
+        'Get-InactiveComputers',
+        'Get-GPOLinkReport',
+        'Get-NestedGroupMembership',
+        'Get-UserLoginHistory',
+        'Get-ADComputerDNS',
+        'Get-ADPermissionsReport'
+
     )
 
     # Cmdlets to export from this module
