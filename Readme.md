@@ -36,7 +36,7 @@ This script collection provides essential tools for Active Directory administrat
 - Appropriate AD permissions to execute these commands
 - Write access to the output directory (default: C:\Reports)
 
-## File Structure (Just a recommendation)
+## File Structure
 
 The scripts should be organized using the following structure and naming conventions:
 
@@ -77,6 +77,136 @@ AD-Management/
    - Use clear, descriptive folder names
    - Separate reporting functions from management functions
    - Use PascalCase for folder names
+
+## Module Files
+
+### ADFunctions.psm1
+
+The main module file automatically imports all functions and makes them available when the module is loaded.
+
+```powershell
+#Requires -Version 5.1
+#Requires -Modules ActiveDirectory
+
+<#
+.SYNOPSIS
+    Active Directory Management Functions Module
+.DESCRIPTION
+    Collection of PowerShell functions for Active Directory user management,
+    reporting, and maintenance tasks.
+.NOTES
+    Version:        1.0.0
+    Author:         [Your Name]
+    Creation Date:  [Date]
+    Purpose/Change: Initial module creation
+#>
+
+# Get public and private function definition files
+$Public  = @( Get-ChildItem -Path $PSScriptRoot\Reporting\*.ps1, `
+                           $PSScriptRoot\Management\*.ps1 -ErrorAction SilentlyContinue )
+
+# Dot source the files
+foreach ($import in $Public) {
+    try {
+        . $import.FullName
+    }
+    catch {
+        Write-Error "Failed to import function $($import.FullName): $_"
+    }
+}
+
+# Export all public functions
+Export-ModuleMember -Function $Public.BaseName
+```
+
+### ADFunctions.psd1
+
+The module manifest contains metadata and configuration information for the module.
+
+```powershell
+@{
+    # Script module or binary module file associated with this manifest.
+    RootModule = 'ADFunctions.psm1'
+
+    # Version number of this module.
+    ModuleVersion = '1.0.0'
+
+    # Supported PSEditions
+    CompatiblePSEditions = @('Desktop', 'Core')
+
+    # ID used to uniquely identify this module
+    GUID = '[Generate a new GUID]'  # Use New-Guid to generate
+
+    # Author of this module
+    Author = '[Your Name]'
+
+    # Company or vendor of this module
+    CompanyName = '[Your Company]'
+
+    # Copyright statement for this module
+    Copyright = '(c) [Year] [Your Name/Company]. All rights reserved.'
+
+    # Description of the functionality provided by this module
+    Description = 'Active Directory management and reporting functions for user administration and maintenance.'
+
+    # Minimum version of the PowerShell engine required by this module
+    PowerShellVersion = '5.1'
+
+    # Modules that must be imported into the global environment prior to importing this module
+    RequiredModules = @('ActiveDirectory')
+
+    # Functions to export from this module
+    FunctionsToExport = @(
+        'Get-InactiveADUsers',
+        'Get-ExpiredPasswords',
+        'Remove-DisabledUsers',
+        'Get-GroupMembershipReport',
+        'Get-LockedAccounts',
+        'New-ADUserFromTemplate'
+    )
+
+    # Private data to pass to the module specified in RootModule/ModuleToProcess
+    PrivateData = @{
+        PSData = @{
+            # Tags applied to this module for module discovery
+            Tags = @('ActiveDirectory', 'UserManagement', 'Reporting', 'Administration')
+            License = 'MIT'
+        }
+    }
+}
+```
+
+### Module Installation and Setup
+
+1. Generate a new GUID for the module:
+
+```powershell
+New-Guid | clip  # This copies a new GUID to your clipboard
+```
+
+2. Update the placeholders in both .psd1 and .psm1 files:
+
+- [Your Name]
+- [Your Company]
+- [Year]
+- [Generate a new GUID]
+- ProjectUri (if applicable)
+
+3. Install the module:
+
+```powershell
+# Copy to PowerShell modules directory
+Copy-Item -Path ".\AD-Management" -Destination "$($env:PSModulePath.Split(';')[0])" -Recurse
+
+# Import the module
+Import-Module ADFunctions
+```
+
+4. Verify installation:
+
+```powershell
+Get-Module ADFunctions
+```
 
 ### Usage Options
 
