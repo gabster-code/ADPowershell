@@ -14,6 +14,7 @@ That is the purpose why I have these and I just know having these in any IT pers
 
 ## Table of Contents
 
+- [File Structure](#file-structure)
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Functions](#functions)
@@ -34,6 +35,66 @@ This script collection provides essential tools for Active Directory administrat
 - Active Directory PowerShell module (Import-Module ActiveDirectory)
 - Appropriate AD permissions to execute these commands
 - Write access to the output directory (default: C:\Reports)
+
+## File Structure
+
+The scripts should be organized using the following structure and naming conventions:
+
+```
+AD-Management/
+│
+├── Reporting/
+│   ├── Get-InactiveADUsers.ps1
+│   ├── Get-ExpiredPasswords.ps1
+│   ├── Get-GroupMembershipReport.ps1
+│   └── Get-LockedAccounts.ps1
+│
+├── Management/
+│   ├── Remove-DisabledUsers.ps1
+│   └── New-ADUserFromTemplate.ps1
+│
+├── ADFunctions.psm1      # Combined module file
+├── ADFunctions.psd1      # Module manifest
+└── README.md             # This documentation
+```
+
+### Naming Conventions
+
+1. **Individual Script Files (.ps1)**:
+
+   - Use Pascal Case (e.g., `Get-InactiveADUsers.ps1`)
+   - Start with the verb that describes the action
+   - Follow PowerShell approved verbs (Get, Set, Remove, New, etc.)
+   - End with a descriptive noun that explains the object being manipulated
+   - Each file should contain a single function matching its filename
+
+2. **Module Files**:
+
+   - Main module: `ADFunctions.psm1`
+   - Manifest: `ADFunctions.psd1`
+
+3. **Directory Structure**:
+   - Use clear, descriptive folder names
+   - Separate reporting functions from management functions
+   - Use PascalCase for folder names
+
+### Usage Options
+
+You can either:
+
+1. Use individual scripts:
+
+```powershell
+# Load individual function
+. .\Reporting\Get-InactiveADUsers.ps1
+```
+
+2. Import the entire module:
+
+```powershell
+# Import the module
+Import-Module .\ADFunctions.psm1
+```
 
 ## Functions
 
