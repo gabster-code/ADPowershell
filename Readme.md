@@ -36,7 +36,7 @@ This script collection provides essential tools for Active Directory administrat
 - Appropriate AD permissions to execute these commands
 - Write access to the output directory (default: C:\Reports)
 
-## File Structure
+## File Structure (Just a recommendation)
 
 The scripts should be organized using the following structure and naming conventions:
 
